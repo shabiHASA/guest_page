@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎀 방명록 🎀</title>
+    <title>방명록</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
         
@@ -148,6 +148,18 @@
             box-shadow: 0 6px 20px rgba(233, 30, 99, 0.6);
         }
 
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .loading {
+            text-align: center;
+            color: #ad1457;
+            font-size: 1.1rem;
+            padding: 20px;
+        }
+
         .guestbook-entries {
             display: grid;
             gap: 20px;
@@ -163,6 +175,18 @@
             backdrop-filter: blur(5px);
             transform: translateY(0);
             transition: all 0.3s ease;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .entry:hover {
@@ -246,6 +270,26 @@
             font-style: italic;
         }
 
+        .firebase-status {
+            text-align: center;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+        }
+
+        .firebase-connected {
+            background: rgba(76, 175, 80, 0.1);
+            color: #4caf50;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .firebase-error {
+            background: rgba(244, 67, 54, 0.1);
+            color: #f44336;
+            border: 1px solid rgba(244, 67, 54, 0.3);
+        }
+
         @media (max-width: 600px) {
             .title {
                 font-size: 2rem;
@@ -269,9 +313,13 @@
     
     <div class="container">
         <div class="header">
-            <h1 class="title">💖 내 친구들의 방명록 💖</h1>
-            <p class="subtitle">소중한 추억을 남겨주세요 ✨</p>
+            <h1 class="title">🎀 방명록 🎀</h1>
+            <p class="subtitle">낙원인이라면 방명록을 남겨줘~✨</p>
             <div class="ribbon"></div>
+        </div>
+
+        <div id="firebaseStatus" class="firebase-status">
+            🔥 Firebase 연결 중... 잠시만 기다려주세요!
         </div>
 
         <div class="form-container">
@@ -283,22 +331,60 @@
                 
                 <div class="form-group">
                     <label for="message">💌 메시지</label>
-                    <textarea id="message" name="message" required placeholder="따뜻한 메시지를 남겨주세요 💕"></textarea>
+                    <textarea id="message" name="message" required placeholder="메시지를 남겨주세요 💕"></textarea>
                 </div>
                 
-                <button type="submit" class="submit-btn">🩷 방명록에 남기기 🩷</button>
+                <button type="submit" class="submit-btn" id="submitBtn">🩷 방명록에 남기기 🩷</button>
             </form>
         </div>
 
         <div class="guestbook-entries" id="entries">
-            <div class="no-entries">
-                아직 방명록이 비어있어요 💭<br>
-                첫 번째 메시지를 남겨주세요! 🌸
-            </div>
+            <div class="loading">💫 방명록을 불러오는 중...</div>
         </div>
     </div>
 
-    <script>
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+        import { getFirestore, collection, addDoc, onSnapshot, orderBy, query, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+
+        // Firebase 설정
+        const firebaseConfig = {
+            apiKey: "AIzaSyD9Y_7VyzjQvfPBjixoNf8fizfxlwzQr4I",
+            authDomain: "beta-b7f78.firebaseapp.com",
+            projectId: "beta-b7f78",
+            storageBucket: "beta-b7f78.firebasestorage.app",
+            messagingSenderId: "8487351227",
+            appId: "1:8487351227:web:ef99c0c1d46850b27f4a9e",
+            measurementId: "G-HMCXTFE8YC"
+        };
+
+        let app, db;
+        let isFirebaseConnected = false;
+
+        // Firebase 초기화
+        try {
+            // 실제 Firebase 프로젝트가 없으면 데모 모드로 작동
+            if (firebaseConfig.apiKey === "YOUR_API_KEY") {
+                throw new Error("Firebase 설정이 필요합니다");
+            }
+            
+            app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            isFirebaseConnected = true;
+            
+            document.getElementById('firebaseStatus').className = 'firebase-status firebase-connected';
+            document.getElementById('firebaseStatus').textContent = '🔥 Firebase 연결 완료! 이제 모든 친구들이 방명록을 볼 수 있어요!';
+            
+        } catch (error) {
+            console.log('Firebase 데모 모드로 실행합니다:', error.message);
+            document.getElementById('firebaseStatus').className = 'firebase-status firebase-error';
+            document.getElementById('firebaseStatus').innerHTML = '⚠️ 데모 모드입니다. Firebase 설정 후 실제 사용 가능해요!<br><small>아래 설정 방법을 확인해주세요 👇</small>';
+            
+            // 데모 모드에서는 로컬스토리지 사용
+            isFirebaseConnected = false;
+        }
+
         // 하트 장식 생성
         function createHearts() {
             const heartsContainer = document.getElementById('heartsDecoration');
@@ -315,8 +401,49 @@
             }
         }
 
-        // 방명록 데이터 저장/불러오기
-        function saveEntry(name, message) {
+        // Firebase에 방명록 저장
+        async function saveToFirebase(name, message) {
+            try {
+                const docRef = await addDoc(collection(db, 'guestbook'), {
+                    name: name,
+                    message: message,
+                    timestamp: serverTimestamp()
+                });
+                console.log('Firebase에 저장됨:', docRef.id);
+                return true;
+            } catch (error) {
+                console.error('Firebase 저장 실패:', error);
+                return false;
+            }
+        }
+
+        // Firebase에서 방명록 실시간 로드
+        function loadFromFirebase() {
+            const q = query(collection(db, 'guestbook'), orderBy('timestamp', 'desc'));
+            
+            onSnapshot(q, (querySnapshot) => {
+                const entries = [];
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    entries.push({
+                        id: doc.id,
+                        name: data.name,
+                        message: data.message,
+                        date: data.timestamp ? data.timestamp.toDate().toLocaleString('ko-KR', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        }) : '방금 전'
+                    });
+                });
+                displayEntries(entries);
+            });
+        }
+
+        // 로컬스토리지 방식 (데모용)
+        function saveToLocal(name, message) {
             const entries = JSON.parse(localStorage.getItem('guestbookEntries') || '[]');
             const newEntry = {
                 id: Date.now(),
@@ -335,8 +462,13 @@
             return newEntry;
         }
 
-        function loadEntries() {
+        function loadFromLocal() {
             const entries = JSON.parse(localStorage.getItem('guestbookEntries') || '[]');
+            displayEntries(entries);
+        }
+
+        // 방명록 표시
+        function displayEntries(entries) {
             const entriesContainer = document.getElementById('entries');
             
             if (entries.length === 0) {
@@ -367,38 +499,110 @@
         }
 
         // 폼 제출 처리
-        document.getElementById('guestbookForm').addEventListener('submit', function(e) {
+        document.getElementById('guestbookForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const name = document.getElementById('name').value.trim();
             const message = document.getElementById('message').value.trim();
+            const submitBtn = document.getElementById('submitBtn');
             
             if (name && message) {
-                saveEntry(name, message);
-                loadEntries();
+                submitBtn.disabled = true;
+                submitBtn.textContent = '💫 저장 중...';
                 
-                // 폼 초기화
-                document.getElementById('name').value = '';
-                document.getElementById('message').value = '';
+                let success = false;
                 
-                // 성공 애니메이션 (간단한 알림)
-                const btn = document.querySelector('.submit-btn');
-                const originalText = btn.textContent;
-                btn.textContent = '💕 등록되었습니다! 💕';
-                btn.style.background = 'linear-gradient(45deg, #4caf50, #81c784)';
+                if (isFirebaseConnected) {
+                    success = await saveToFirebase(name, message);
+                } else {
+                    saveToLocal(name, message);
+                    loadFromLocal();
+                    success = true;
+                }
                 
-                setTimeout(() => {
-                    btn.textContent = originalText;
-                    btn.style.background = 'linear-gradient(45deg, #e91e63, #f06292)';
-                }, 2000);
+                if (success) {
+                    // 폼 초기화
+                    document.getElementById('name').value = '';
+                    document.getElementById('message').value = '';
+                    
+                    // 성공 메시지
+                    submitBtn.textContent = '💕 등록되었습니다! 💕';
+                    submitBtn.style.background = 'linear-gradient(45deg, #4caf50, #81c784)';
+                    
+                    setTimeout(() => {
+                        submitBtn.textContent = '🩷 방명록에 남기기 🩷';
+                        submitBtn.style.background = 'linear-gradient(45deg, #e91e63, #f06292)';
+                        submitBtn.disabled = false;
+                    }, 2000);
+                } else {
+                    submitBtn.textContent = '❌ 저장 실패';
+                    submitBtn.style.background = 'linear-gradient(45deg, #f44336, #ef5350)';
+                    
+                    setTimeout(() => {
+                        submitBtn.textContent = '🩷 방명록에 남기기 🩷';
+                        submitBtn.style.background = 'linear-gradient(45deg, #e91e63, #f06292)';
+                        submitBtn.disabled = false;
+                    }, 2000);
+                }
             }
         });
 
         // 페이지 로드 시 초기화
         document.addEventListener('DOMContentLoaded', function() {
             createHearts();
-            loadEntries();
+            
+            if (isFirebaseConnected) {
+                loadFromFirebase();
+            } else {
+                loadFromLocal();
+            }
         });
     </script>
+
+    <style>
+        .setup-guide {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            border: 2px solid rgba(255, 152, 0, 0.3);
+            backdrop-filter: blur(5px);
+        }
+
+        .setup-guide h3 {
+            color: #d81b60;
+            margin-bottom: 15px;
+        }
+
+        .setup-guide ol {
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .setup-guide li {
+            margin-bottom: 10px;
+        }
+
+        .setup-guide code {
+            background: rgba(233, 30, 99, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+
+    <div class="container">
+        <div class="setup-guide">
+            <h3>🔥 Firebase 설정 방법</h3>
+            <ol>
+                <li><strong>Firebase 프로젝트 만들기:</strong> <a href="https://console.firebase.google.com" target="_blank">Firebase Console</a>에서 새 프로젝트 생성</li>
+                <li><strong>Firestore 활성화:</strong> 프로젝트에서 Firestore Database 생성 (테스트 모드로 시작)</li>
+                <li><strong>웹 앱 등록:</strong> 프로젝트 설정에서 웹 앱 추가</li>
+                <li><strong>설정 복사:</strong> 제공된 설정을 HTML의 <code>firebaseConfig</code> 부분에 붙여넣기</li>
+                <li><strong>GitHub에 업로드:</strong> 설정 완료 후 GitHub Pages로 배포</li>
+            </ol>
+            <p><strong>💡 팁:</strong> 현재는 데모 모드라서 각자 브라우저에만 저장돼요. Firebase 설정하면 모든 친구들이 함께 볼 수 있어요!</p>
+        </div>
+    </div>
 </body>
 </html>
