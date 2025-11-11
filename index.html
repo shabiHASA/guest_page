@@ -157,7 +157,7 @@
 
         .loading {
             text-align: center;
-            color: #ffb3c6;
+            color: #90caf9;
             font-size: 1.3rem;
             padding: 20px;
         }
@@ -171,8 +171,8 @@
             background: rgba(255, 255, 255, 0.98);
             border-radius: 20px;
             padding: 25px;
-            box-shadow: 0 6px 25px rgba(255, 228, 235, 0.4);
-            border: 2px solid rgba(255, 240, 245, 0.6);
+            box-shadow: 0 6px 25px rgba(224, 242, 254, 0.5);
+            border: 2px solid rgba(187, 222, 251, 0.6);
             position: relative;
             backdrop-filter: blur(5px);
             transform: translateY(0);
@@ -193,7 +193,7 @@
 
         .entry:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 35px rgba(255, 228, 235, 0.6);
+            box-shadow: 0 10px 35px rgba(224, 242, 254, 0.7);
         }
 
         .entry::before {
@@ -222,24 +222,24 @@
         .entry-name {
             font-size: 1.5rem;
             font-weight: 400;
-            color: #ffb3c6;
-            text-shadow: 1px 1px 2px rgba(255, 179, 198, 0.2);
+            color: #90caf9;
+            text-shadow: 1px 1px 2px rgba(144, 202, 249, 0.2);
         }
 
         .entry-date {
             font-size: 1rem;
-            color: #ffc4d6;
+            color: #81b5d8;
             opacity: 0.9;
         }
 
         .entry-message {
             font-size: 1.2rem;
             line-height: 1.6;
-            color: #666;
-            background: rgba(255, 250, 252, 0.6);
+            color: #7ba5c4;
+            background: rgba(224, 242, 254, 0.4);
             padding: 15px;
             border-radius: 10px;
-            border-left: 4px solid #ffe0eb;
+            border-left: 4px solid #90caf9;
         }
 
         .hearts-decoration {
@@ -254,7 +254,7 @@
 
         .heart {
             position: absolute;
-            color: rgba(255, 228, 235, 0.7);
+            color: rgba(232, 222, 255, 0.7);
             font-size: 1.2rem;
             animation: sparkle 4s ease-in-out infinite;
         }
@@ -266,7 +266,7 @@
 
         .no-entries {
             text-align: center;
-            color: #ffb3c6;
+            color: #90caf9;
             font-size: 1.4rem;
             padding: 40px;
             font-style: normal;
@@ -287,9 +287,9 @@
         }
 
         .firebase-error {
-            background: rgba(255, 228, 235, 0.5);
-            color: #ffb3c6;
-            border: 1px solid rgba(255, 179, 198, 0.4);
+            background: rgba(232, 222, 255, 0.5);
+            color: #c49bc9;
+            border: 1px solid rgba(212, 165, 217, 0.4);
         }
 
         @media (max-width: 600px) {
@@ -319,20 +319,20 @@
     
     <div class="container">
         <div class="header">
-            <h1 class="title">꒰১ 방명록 ໒꒱</h1>
-            <p class="subtitle">낙원인이라면 방명록을 남겨줘~♪</p>
+            <h1 class="title">🫧 방명록 🫧</h1>
+            <p class="subtitle">낙원인이라면 방명록을 남겨줘~♪⊹.˚</p>
             <div class="ribbon"></div>
         </div>
 
         <div id="firebaseStatus" class="firebase-status">
-            Firebase 연결 중... 잠시만 기다려주세요!
+             Firebase 연결 중... 잠시만 기다려주세요!
         </div>
 
         <div class="form-container">
             <form id="guestbookForm">
                 <div class="form-group">
                     <label for="name">✦ 이름</label>
-                    <input type="text" id="name" name="name" required placeholder="이름을 써줘!">
+                    <input type="text" id="name" name="name" required placeholder="이름을 알려줘!">
                 </div>
                 
                 <div class="form-group">
@@ -340,7 +340,7 @@
                     <textarea id="message" name="message" required placeholder="메시지를 남겨줘!"></textarea>
                 </div>
                 
-                <button type="submit" class="submit-btn" id="submitBtn">꒰১ 방명록에 남기기 ໒꒱</button>
+                <button type="submit" class="submit-btn" id="submitBtn">🤍 방명록에 남기기 🤍</button>
             </form>
         </div>
 
@@ -385,7 +385,7 @@
         } catch (error) {
             console.log('Firebase 데모 모드로 실행합니다:', error.message);
             document.getElementById('firebaseStatus').className = 'firebase-status firebase-error';
-            document.getElementById('firebaseStatus').innerHTML = '⚠︎ 데모 모드입니다. Firebase 설정 후 실제 사용 가능해요!<br><small>아래 설정 방법을 확인해주세요 </small>';
+            document.getElementById('firebaseStatus').innerHTML = '데모 모드입니다. Firebase 설정 후 실제 사용 가능해요!<br><small>아래 설정 방법을 확인해주세요 👇</small>';
             
             // 데모 모드에서는 로컬스토리지 사용
             isFirebaseConnected = false;
@@ -394,7 +394,7 @@
         // 하트 장식 생성
         function createHearts() {
             const heartsContainer = document.getElementById('heartsDecoration');
-            const heartSymbols = ['🤍', '🦭', '💭', '☁️', '🪼', '🫧'];
+            const heartSymbols = ['🦭', '💭', '☁️', '🫧', '🪼', '🤍'];
             
             for (let i = 0; i < 15; i++) {
                 const heart = document.createElement('div');
@@ -480,8 +480,8 @@
             if (entries.length === 0) {
                 entriesContainer.innerHTML = `
                     <div class="no-entries">
-                        아직 방명록이 비어있어요<br>
-                        첫 번째 메시지를 남겨주세요!
+                        아직 방명록이 비어있어요 💭<br>
+                        첫 번째 메시지를 남겨주세요! 🪼
                     </div>
                 `;
                 return;
@@ -514,7 +514,7 @@
             
             if (name && message) {
                 submitBtn.disabled = true;
-                submitBtn.textContent = '저장 중...';
+                submitBtn.textContent = '🦭 저장 중...';
                 
                 let success = false;
                 
@@ -532,21 +532,21 @@
                     document.getElementById('message').value = '';
                     
                     // 성공 메시지
-                    submitBtn.textContent = '✦ 등록되었습니다! ✦';
-                    submitBtn.style.background = 'linear-gradient(45deg, #c8e6c9, #a5d6a7)';
+                    submitBtn.textContent = '🫧 등록되었습니다! 🫧';
+                    submitBtn.style.background = 'linear-gradient(45deg, #b8d4b8, #c8e6c9)';
                     
                     setTimeout(() => {
-                        submitBtn.textContent = '꒰১ 방명록에 남기기 ໒꒱';
-                        submitBtn.style.background = 'linear-gradient(45deg, #ffc4d6, #ffe0eb)';
+                        submitBtn.textContent = '🤍 방명록에 남기기 🤍';
+                        submitBtn.style.background = 'linear-gradient(45deg, #d4a5d9, #e8deff)';
                         submitBtn.disabled = false;
                     }, 2000);
                 } else {
-                    submitBtn.textContent = '저장 실패';
-                    submitBtn.style.background = 'linear-gradient(45deg, #ffcdd2, #ef9a9a)';
+                    submitBtn.textContent = '❌ 저장 실패';
+                    submitBtn.style.background = 'linear-gradient(45deg, #e8c9d4, #f0d4e0)';
                     
                     setTimeout(() => {
-                        submitBtn.textContent = '꒰১ 방명록에 남기기 ໒꒱';
-                        submitBtn.style.background = 'linear-gradient(45deg, #ffc4d6, #ffe0eb)';
+                        submitBtn.textContent = '🤍 방명록에 남기기 🤍';
+                        submitBtn.style.background = 'linear-gradient(45deg, #d4a5d9, #e8deff)';
                         submitBtn.disabled = false;
                     }, 2000);
                 }
