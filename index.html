@@ -15,7 +15,7 @@
 
         body {
             font-family: 'Cute Font', cursive;
-            background: linear-gradient(135deg, #fce4ec 0%, #f8bbd9 50%, #f48fb1 100%);
+            background: linear-gradient(135deg, #f8f5ff 0%, #f0e6ff 50%, #e8deff 100%);
             min-height: 100vh;
             padding: 20px;
             position: relative;
@@ -29,9 +29,9 @@
             width: 100%;
             height: 100%;
             background-image: 
-                radial-gradient(circle at 20% 30%, rgba(255, 182, 193, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(255, 192, 203, 0.2) 0%, transparent 50%),
-                radial-gradient(circle at 60% 20%, rgba(255, 228, 225, 0.4) 0%, transparent 50%);
+                radial-gradient(circle at 20% 30%, rgba(240, 230, 255, 0.6) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(232, 222, 255, 0.5) 0%, transparent 50%),
+                radial-gradient(circle at 60% 20%, rgba(248, 245, 255, 0.7) 0%, transparent 50%);
             pointer-events: none;
             z-index: -1;
         }
@@ -50,15 +50,15 @@
 
         .title {
             font-size: 2.8rem;
-            color: #d81b60;
-            text-shadow: 2px 2px 4px rgba(216, 27, 96, 0.3);
+            color: #d4a5d9;
+            text-shadow: 2px 2px 4px rgba(212, 165, 217, 0.3);
             margin-bottom: 10px;
             font-weight: 400;
         }
 
         .subtitle {
             font-size: 1.4rem;
-            color: #ad1457;
+            color: #c49bc9;
             font-weight: 400;
         }
 
@@ -68,14 +68,14 @@
             right: -20px;
             width: 60px;
             height: 60px;
-            background: linear-gradient(45deg, #e91e63, #f06292);
+            background: linear-gradient(45deg, #d4a5d9, #e8deff);
             transform: rotate(15deg);
             border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(233, 30, 99, 0.4);
+            box-shadow: 0 4px 12px rgba(212, 165, 217, 0.4);
         }
 
         .ribbon::before {
-            content: '💝';
+            content: '🦭';
             position: absolute;
             top: 50%;
             left: 50%;
@@ -84,12 +84,12 @@
         }
 
         .form-container {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
             padding: 30px;
             margin-bottom: 30px;
-            box-shadow: 0 8px 32px rgba(255, 182, 193, 0.4);
-            border: 2px solid rgba(255, 192, 203, 0.5);
+            box-shadow: 0 8px 32px rgba(232, 222, 255, 0.5);
+            border: 2px solid rgba(240, 230, 255, 0.8);
             backdrop-filter: blur(10px);
         }
 
@@ -100,7 +100,7 @@
         label {
             display: block;
             margin-bottom: 8px;
-            color: #ad1457;
+            color: #c49bc9;
             font-weight: 400;
             font-size: 1.3rem;
         }
@@ -108,19 +108,19 @@
         input, textarea {
             width: 100%;
             padding: 15px;
-            border: 2px solid #f8bbd9;
+            border: 2px solid #e8deff;
             border-radius: 15px;
             font-size: 1.1rem;
             font-family: 'Cute Font', cursive;
-            background: rgba(252, 228, 236, 0.5);
+            background: rgba(248, 245, 255, 0.7);
             transition: all 0.3s ease;
         }
 
         input:focus, textarea:focus {
             outline: none;
-            border-color: #e91e63;
-            box-shadow: 0 0 15px rgba(233, 30, 99, 0.3);
-            background: rgba(255, 255, 255, 0.8);
+            border-color: #d4a5d9;
+            box-shadow: 0 0 15px rgba(212, 165, 217, 0.4);
+            background: rgba(255, 255, 255, 0.95);
         }
 
         textarea {
@@ -129,8 +129,8 @@
         }
 
         .submit-btn {
-            background: linear-gradient(45deg, #e91e63, #f06292);
-            color: white;
+            background: linear-gradient(45deg, #d4a5d9, #e8deff);
+            color: #9d7ba3;
             border: none;
             padding: 15px 40px;
             border-radius: 25px;
@@ -139,14 +139,15 @@
             font-weight: 400;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(233, 30, 99, 0.4);
+            box-shadow: 0 4px 15px rgba(212, 165, 217, 0.4);
             display: block;
             margin: 0 auto;
         }
 
         .submit-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(233, 30, 99, 0.6);
+            box-shadow: 0 6px 20px rgba(212, 165, 217, 0.6);
+            background: linear-gradient(45deg, #c49bc9, #dcd0e8);
         }
 
         .submit-btn:disabled {
@@ -156,7 +157,7 @@
 
         .loading {
             text-align: center;
-            color: #ad1457;
+            color: #ffb3c6;
             font-size: 1.3rem;
             padding: 20px;
         }
@@ -167,11 +168,11 @@
         }
 
         .entry {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.98);
             border-radius: 20px;
             padding: 25px;
-            box-shadow: 0 6px 25px rgba(255, 182, 193, 0.3);
-            border: 2px solid rgba(255, 192, 203, 0.3);
+            box-shadow: 0 6px 25px rgba(255, 228, 235, 0.4);
+            border: 2px solid rgba(255, 240, 245, 0.6);
             position: relative;
             backdrop-filter: blur(5px);
             transform: translateY(0);
@@ -192,11 +193,11 @@
 
         .entry:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 35px rgba(255, 182, 193, 0.5);
+            box-shadow: 0 10px 35px rgba(255, 228, 235, 0.6);
         }
 
         .entry::before {
-            content: '💕';
+            content: '🫧';
             position: absolute;
             top: -5px;
             right: 15px;
@@ -221,24 +222,24 @@
         .entry-name {
             font-size: 1.5rem;
             font-weight: 400;
-            color: #d81b60;
-            text-shadow: 1px 1px 2px rgba(216, 27, 96, 0.2);
+            color: #ffb3c6;
+            text-shadow: 1px 1px 2px rgba(255, 179, 198, 0.2);
         }
 
         .entry-date {
             font-size: 1rem;
-            color: #ad1457;
-            opacity: 0.8;
+            color: #ffc4d6;
+            opacity: 0.9;
         }
 
         .entry-message {
             font-size: 1.2rem;
             line-height: 1.6;
-            color: #333;
-            background: rgba(252, 228, 236, 0.3);
+            color: #666;
+            background: rgba(255, 250, 252, 0.6);
             padding: 15px;
             border-radius: 10px;
-            border-left: 4px solid #f06292;
+            border-left: 4px solid #ffe0eb;
         }
 
         .hearts-decoration {
@@ -253,19 +254,19 @@
 
         .heart {
             position: absolute;
-            color: rgba(255, 182, 193, 0.6);
+            color: rgba(255, 228, 235, 0.7);
             font-size: 1.2rem;
             animation: sparkle 4s ease-in-out infinite;
         }
 
         @keyframes sparkle {
             0%, 100% { opacity: 0.3; transform: scale(1); }
-            50% { opacity: 0.8; transform: scale(1.2); }
+            50% { opacity: 0.7; transform: scale(1.2); }
         }
 
         .no-entries {
             text-align: center;
-            color: #ad1457;
+            color: #ffb3c6;
             font-size: 1.4rem;
             padding: 40px;
             font-style: normal;
@@ -280,15 +281,15 @@
         }
 
         .firebase-connected {
-            background: rgba(76, 175, 80, 0.1);
-            color: #4caf50;
-            border: 1px solid rgba(76, 175, 80, 0.3);
+            background: rgba(198, 246, 213, 0.3);
+            color: #81c784;
+            border: 1px solid rgba(129, 199, 132, 0.3);
         }
 
         .firebase-error {
-            background: rgba(244, 67, 54, 0.1);
-            color: #f44336;
-            border: 1px solid rgba(244, 67, 54, 0.3);
+            background: rgba(255, 228, 235, 0.5);
+            color: #ffb3c6;
+            border: 1px solid rgba(255, 179, 198, 0.4);
         }
 
         @media (max-width: 600px) {
@@ -318,33 +319,33 @@
     
     <div class="container">
         <div class="header">
-            <h1 class="title">🎀 방명록 🎀</h1>
-            <p class="subtitle">낙원인이라면 방명록을 남겨줘~✨</p>
+            <h1 class="title">꒰১ 방명록 ໒꒱</h1>
+            <p class="subtitle">낙원인이라면 방명록을 남겨줘~♪</p>
             <div class="ribbon"></div>
         </div>
 
         <div id="firebaseStatus" class="firebase-status">
-            🔥 Firebase 연결 중... 잠시만 기다려주세요!
+            Firebase 연결 중... 잠시만 기다려주세요!
         </div>
 
         <div class="form-container">
             <form id="guestbookForm">
                 <div class="form-group">
-                    <label for="name">💝 이름</label>
-                    <input type="text" id="name" name="name" required placeholder="당신의 이름을 알려주세요">
+                    <label for="name">✦ 이름</label>
+                    <input type="text" id="name" name="name" required placeholder="이름을 써줘!">
                 </div>
                 
                 <div class="form-group">
-                    <label for="message">💌 메시지</label>
-                    <textarea id="message" name="message" required placeholder="메시지를 남겨주세요 💕"></textarea>
+                    <label for="message">✦ 메시지</label>
+                    <textarea id="message" name="message" required placeholder="메시지를 남겨줘!"></textarea>
                 </div>
                 
-                <button type="submit" class="submit-btn" id="submitBtn">🩷 방명록에 남기기 🩷</button>
+                <button type="submit" class="submit-btn" id="submitBtn">꒰১ 방명록에 남기기 ໒꒱</button>
             </form>
         </div>
 
         <div class="guestbook-entries" id="entries">
-            <div class="loading">💫 방명록을 불러오는 중...</div>
+            <div class="loading">방명록을 불러오는 중...</div>
         </div>
     </div>
 
@@ -379,12 +380,12 @@
             isFirebaseConnected = true;
             
             document.getElementById('firebaseStatus').className = 'firebase-status firebase-connected';
-            document.getElementById('firebaseStatus').textContent = '🔥 Firebase 연결 완료! 이제 모든 친구들이 방명록을 볼 수 있어요!';
+            document.getElementById('firebaseStatus').textContent = 'Firebase 연결 완료! 이제 모든 친구들이 방명록을 볼 수 있어요!';
             
         } catch (error) {
             console.log('Firebase 데모 모드로 실행합니다:', error.message);
             document.getElementById('firebaseStatus').className = 'firebase-status firebase-error';
-            document.getElementById('firebaseStatus').innerHTML = '⚠️ 데모 모드입니다. Firebase 설정 후 실제 사용 가능해요!<br><small>아래 설정 방법을 확인해주세요 👇</small>';
+            document.getElementById('firebaseStatus').innerHTML = '⚠︎ 데모 모드입니다. Firebase 설정 후 실제 사용 가능해요!<br><small>아래 설정 방법을 확인해주세요 </small>';
             
             // 데모 모드에서는 로컬스토리지 사용
             isFirebaseConnected = false;
@@ -393,7 +394,7 @@
         // 하트 장식 생성
         function createHearts() {
             const heartsContainer = document.getElementById('heartsDecoration');
-            const heartSymbols = ['💖', '💕', '💗', '🌸', '🎀', '💝'];
+            const heartSymbols = ['🤍', '🦭', '💭', '☁️', '🪼', '🫧'];
             
             for (let i = 0; i < 15; i++) {
                 const heart = document.createElement('div');
@@ -479,8 +480,8 @@
             if (entries.length === 0) {
                 entriesContainer.innerHTML = `
                     <div class="no-entries">
-                        아직 방명록이 비어있어요 💭<br>
-                        첫 번째 메시지를 남겨주세요! 🌸
+                        아직 방명록이 비어있어요<br>
+                        첫 번째 메시지를 남겨주세요!
                     </div>
                 `;
                 return;
@@ -513,7 +514,7 @@
             
             if (name && message) {
                 submitBtn.disabled = true;
-                submitBtn.textContent = '💫 저장 중...';
+                submitBtn.textContent = '저장 중...';
                 
                 let success = false;
                 
@@ -531,21 +532,21 @@
                     document.getElementById('message').value = '';
                     
                     // 성공 메시지
-                    submitBtn.textContent = '💕 등록되었습니다! 💕';
-                    submitBtn.style.background = 'linear-gradient(45deg, #4caf50, #81c784)';
+                    submitBtn.textContent = '✦ 등록되었습니다! ✦';
+                    submitBtn.style.background = 'linear-gradient(45deg, #c8e6c9, #a5d6a7)';
                     
                     setTimeout(() => {
-                        submitBtn.textContent = '🩷 방명록에 남기기 🩷';
-                        submitBtn.style.background = 'linear-gradient(45deg, #e91e63, #f06292)';
+                        submitBtn.textContent = '꒰১ 방명록에 남기기 ໒꒱';
+                        submitBtn.style.background = 'linear-gradient(45deg, #ffc4d6, #ffe0eb)';
                         submitBtn.disabled = false;
                     }, 2000);
                 } else {
-                    submitBtn.textContent = '❌ 저장 실패';
-                    submitBtn.style.background = 'linear-gradient(45deg, #f44336, #ef5350)';
+                    submitBtn.textContent = '저장 실패';
+                    submitBtn.style.background = 'linear-gradient(45deg, #ffcdd2, #ef9a9a)';
                     
                     setTimeout(() => {
-                        submitBtn.textContent = '🩷 방명록에 남기기 🩷';
-                        submitBtn.style.background = 'linear-gradient(45deg, #e91e63, #f06292)';
+                        submitBtn.textContent = '꒰১ 방명록에 남기기 ໒꒱';
+                        submitBtn.style.background = 'linear-gradient(45deg, #ffc4d6, #ffe0eb)';
                         submitBtn.disabled = false;
                     }, 2000);
                 }
