@@ -5,8 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>방명록</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cute+Font&display=swap');
-        
+        @import url('https://fonts.googleapis.com/css2?family=Nanum+Myeongjo&family=Gowun+Batang&display=swap');
+
+        :root {
+            --deep-navy: #020c1b;
+            --ocean-mid: #071428;
+            --ice-blue: #a8c8e8;
+            --crystal-blue: #c8dff0;
+            --pale-blue: #ddeef8;
+            --glow-blue: #7fb3d3;
+            --shimmer: #b0d4e8;
+            --white-glow: rgba(220, 240, 255, 0.9);
+            --card-bg: rgba(10, 25, 50, 0.75);
+            --border-crystal: rgba(168, 200, 232, 0.3);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -14,555 +27,570 @@
         }
 
         body {
-            font-family: 'Cute Font', cursive;
-            background: linear-gradient(135deg, #f8f5ff 0%, #f0e6ff 50%, #e8deff 100%);
+            font-family: 'Gowun Batang', serif;
+            background: var(--deep-navy);
             min-height: 100vh;
-            padding: 20px;
+            padding: 30px 20px;
             position: relative;
+            overflow-x: hidden;
+            color: var(--crystal-blue);
         }
 
-        body::before {
+        /* ── 별하늘 캔버스 ── */
+        #starCanvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* ── 물결 오버레이 ── */
+        body::after {
             content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                radial-gradient(circle at 20% 30%, rgba(240, 230, 255, 0.6) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(232, 222, 255, 0.5) 0%, transparent 50%),
-                radial-gradient(circle at 60% 20%, rgba(248, 245, 255, 0.7) 0%, transparent 50%);
+            bottom: 0; left: 0;
+            width: 100%; height: 35%;
+            background: linear-gradient(to top,
+                rgba(10, 30, 60, 0.6) 0%,
+                transparent 100%);
             pointer-events: none;
-            z-index: -1;
+            z-index: 1;
         }
 
+        /* ── 컨테이너 ── */
         .container {
-            max-width: 800px;
+            max-width: 760px;
             margin: 0 auto;
             position: relative;
+            z-index: 2;
         }
 
+        /* ── 헤더 ── */
         .header {
             text-align: center;
-            margin-bottom: 40px;
-            position: relative;
+            margin-bottom: 44px;
+            padding-top: 10px;
         }
 
         .title {
-            font-size: 2.8rem;
-            color: #d4a5d9;
-            text-shadow: 2px 2px 4px rgba(212, 165, 217, 0.3);
-            margin-bottom: 10px;
+            font-family: 'Nanum Myeongjo', serif;
+            font-size: 2.9rem;
             font-weight: 400;
+            letter-spacing: 0.18em;
+            color: var(--white-glow);
+            text-shadow:
+                0 0 12px rgba(168, 200, 232, 0.8),
+                0 0 30px rgba(168, 200, 232, 0.4),
+                0 0 60px rgba(100, 160, 210, 0.2);
+            margin-bottom: 12px;
+            animation: title-pulse 6s ease-in-out infinite;
+        }
+
+        @keyframes title-pulse {
+            0%,100% { text-shadow: 0 0 12px rgba(168,200,232,0.8), 0 0 30px rgba(168,200,232,0.4), 0 0 60px rgba(100,160,210,0.2); }
+            50%     { text-shadow: 0 0 20px rgba(168,200,232,1),   0 0 50px rgba(168,200,232,0.6), 0 0 90px rgba(100,160,210,0.4); }
         }
 
         .subtitle {
-            font-size: 1.4rem;
-            color: #c49bc9;
-            font-weight: 400;
+            font-size: 1.05rem;
+            color: rgba(168, 200, 232, 0.65);
+            letter-spacing: 0.12em;
         }
 
-        .ribbon {
-            position: absolute;
-            top: -10px;
-            right: -20px;
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(45deg, #d4a5d9, #e8deff);
-            transform: rotate(15deg);
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(212, 165, 217, 0.4);
+        .title-divider {
+            width: 120px;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--glow-blue), transparent);
+            margin: 18px auto;
+            box-shadow: 0 0 8px rgba(127, 179, 211, 0.5);
         }
 
-        .ribbon::before {
-            content: '🦭';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(-15deg);
-            font-size: 1.5rem;
+        /* ── 카드 공통 ── */
+        .glass-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-crystal);
+            border-radius: 18px;
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            box-shadow:
+                0 0 0 1px rgba(168,200,232,0.08),
+                0 8px 32px rgba(0, 20, 50, 0.6),
+                inset 0 1px 0 rgba(200, 230, 255, 0.1);
         }
 
+        /* ── 폼 ── */
         .form-container {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 32px rgba(232, 222, 255, 0.5);
-            border: 2px solid rgba(240, 230, 255, 0.8);
-            backdrop-filter: blur(10px);
+            padding: 32px 30px;
+            margin-bottom: 28px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-container::before {
+            content: '';
+            position: absolute;
+            top: -1px; left: 20%; right: 20%;
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(168,200,232,0.6), transparent);
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 22px;
         }
 
         label {
             display: block;
-            margin-bottom: 8px;
-            color: #c49bc9;
-            font-weight: 400;
-            font-size: 1.3rem;
+            margin-bottom: 9px;
+            font-size: 0.85rem;
+            letter-spacing: 0.2em;
+            color: rgba(168, 200, 232, 0.75);
+            text-transform: uppercase;
         }
 
         input, textarea {
             width: 100%;
-            padding: 15px;
-            border: 2px solid #e8deff;
-            border-radius: 15px;
-            font-size: 1.1rem;
-            font-family: 'Cute Font', cursive;
-            background: rgba(248, 245, 255, 0.7);
+            padding: 13px 16px;
+            background: rgba(5, 15, 35, 0.7);
+            border: 1px solid rgba(168, 200, 232, 0.2);
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: 'Gowun Batang', serif;
+            color: var(--pale-blue);
             transition: all 0.3s ease;
+            outline: none;
+        }
+
+        input::placeholder, textarea::placeholder {
+            color: rgba(168, 200, 232, 0.3);
         }
 
         input:focus, textarea:focus {
-            outline: none;
-            border-color: #d4a5d9;
-            box-shadow: 0 0 15px rgba(212, 165, 217, 0.4);
-            background: rgba(255, 255, 255, 0.95);
+            border-color: rgba(168, 200, 232, 0.55);
+            background: rgba(8, 20, 45, 0.85);
+            box-shadow:
+                0 0 0 3px rgba(168,200,232,0.07),
+                0 0 16px rgba(127,179,211,0.15),
+                inset 0 0 20px rgba(100, 160, 210, 0.04);
         }
 
         textarea {
             resize: vertical;
-            min-height: 120px;
+            min-height: 110px;
+            line-height: 1.7;
         }
 
         .submit-btn {
-            background: linear-gradient(45deg, #d4a5d9, #e8deff);
-            color: #9d7ba3;
-            border: none;
-            padding: 15px 40px;
-            border-radius: 25px;
-            font-size: 1.3rem;
-            font-family: 'Cute Font', cursive;
-            font-weight: 400;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(212, 165, 217, 0.4);
             display: block;
-            margin: 0 auto;
+            margin: 6px auto 0;
+            padding: 13px 44px;
+            background: transparent;
+            border: 1px solid rgba(168, 200, 232, 0.45);
+            border-radius: 50px;
+            font-family: 'Nanum Myeongjo', serif;
+            font-size: 1rem;
+            letter-spacing: 0.2em;
+            color: var(--pale-blue);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
         }
 
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(168,200,232,0.12), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .submit-btn:hover::before { left: 100%; }
+
         .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(212, 165, 217, 0.6);
-            background: linear-gradient(45deg, #c49bc9, #dcd0e8);
+            border-color: rgba(168, 200, 232, 0.8);
+            color: #fff;
+            box-shadow: 0 0 20px rgba(127,179,211,0.25), 0 0 40px rgba(127,179,211,0.1);
+            text-shadow: 0 0 10px rgba(200,230,255,0.6);
         }
 
         .submit-btn:disabled {
-            opacity: 0.6;
+            opacity: 0.4;
             cursor: not-allowed;
         }
 
+        /* ── 상태 바 ── */
+        .firebase-status {
+            text-align: center;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            padding: 8px 16px;
+            border-radius: 8px;
+            margin-bottom: 22px;
+            color: rgba(168,200,232,0.6);
+        }
+        .firebase-connected { color: rgba(160, 220, 190, 0.7); }
+        .firebase-error     { color: rgba(220, 180, 200, 0.65); }
+
+        /* ── 로딩 ── */
         .loading {
             text-align: center;
-            color: #90caf9;
-            font-size: 1.3rem;
-            padding: 20px;
+            color: rgba(168,200,232,0.5);
+            font-size: 0.95rem;
+            padding: 30px;
+            letter-spacing: 0.15em;
         }
 
-        .guestbook-entries {
-            display: grid;
-            gap: 20px;
-        }
+        /* ── 항목 ── */
+        .guestbook-entries { display: grid; gap: 16px; }
 
         .entry {
-            background: rgba(255, 255, 255, 0.98);
-            border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 6px 25px rgba(224, 242, 254, 0.5);
-            border: 2px solid rgba(187, 222, 251, 0.6);
+            padding: 22px 26px;
             position: relative;
-            backdrop-filter: blur(5px);
-            transform: translateY(0);
-            transition: all 0.3s ease;
-            animation: fadeInUp 0.5s ease;
+            animation: entry-appear 0.6s ease both;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        @keyframes entry-appear {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
         .entry:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 35px rgba(224, 242, 254, 0.7);
+            transform: translateY(-3px);
+            box-shadow:
+                0 0 0 1px rgba(168,200,232,0.15),
+                0 12px 40px rgba(0, 20, 50, 0.7),
+                0 0 20px rgba(127,179,211,0.06),
+                inset 0 1px 0 rgba(200, 230, 255, 0.12);
         }
 
-        .entry::before {
-            content: '🫧';
+        .entry::after {
+            content: '';
             position: absolute;
-            top: -5px;
-            right: 15px;
-            font-size: 1.5rem;
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+            top: 0; left: 16%; right: 16%;
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(168,200,232,0.2), transparent);
         }
 
         .entry-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
+            align-items: baseline;
+            margin-bottom: 14px;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
         }
 
         .entry-name {
-            font-size: 1.5rem;
-            font-weight: 400;
-            color: #90caf9;
-            text-shadow: 1px 1px 2px rgba(144, 202, 249, 0.2);
+            font-family: 'Nanum Myeongjo', serif;
+            font-size: 1.15rem;
+            color: var(--white-glow);
+            letter-spacing: 0.08em;
+            text-shadow: 0 0 10px rgba(168,200,232,0.4);
         }
 
         .entry-date {
-            font-size: 1rem;
-            color: #81b5d8;
-            opacity: 0.9;
+            font-size: 0.78rem;
+            color: rgba(168,200,232,0.4);
+            letter-spacing: 0.1em;
         }
 
         .entry-message {
-            font-size: 1.2rem;
-            line-height: 1.6;
-            color: #7ba5c4;
-            background: rgba(224, 242, 254, 0.4);
-            padding: 15px;
-            border-radius: 10px;
-            border-left: 4px solid #90caf9;
-        }
-
-        .hearts-decoration {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        .heart {
-            position: absolute;
-            color: rgba(232, 222, 255, 0.7);
-            font-size: 1.2rem;
-            animation: sparkle 4s ease-in-out infinite;
-        }
-
-        @keyframes sparkle {
-            0%, 100% { opacity: 0.3; transform: scale(1); }
-            50% { opacity: 0.7; transform: scale(1.2); }
+            font-size: 0.98rem;
+            line-height: 1.8;
+            color: rgba(200, 225, 245, 0.75);
+            padding-left: 14px;
+            border-left: 1px solid rgba(168,200,232,0.2);
         }
 
         .no-entries {
             text-align: center;
-            color: #90caf9;
-            font-size: 1.4rem;
-            padding: 40px;
-            font-style: normal;
-        }
-
-        .firebase-status {
-            text-align: center;
-            padding: 10px;
-            margin-bottom: 20px;
-            border-radius: 10px;
+            color: rgba(168,200,232,0.4);
             font-size: 1rem;
-        }
-
-        .firebase-connected {
-            background: rgba(198, 246, 213, 0.3);
-            color: #81c784;
-            border: 1px solid rgba(129, 199, 132, 0.3);
-        }
-
-        .firebase-error {
-            background: rgba(232, 222, 255, 0.5);
-            color: #c49bc9;
-            border: 1px solid rgba(212, 165, 217, 0.4);
+            padding: 40px;
+            letter-spacing: 0.12em;
+            line-height: 2.2;
         }
 
         @media (max-width: 600px) {
-            .title {
-                font-size: 2.3rem;
-            }
-            
-            .subtitle {
-                font-size: 1.2rem;
-            }
-            
-            .form-container {
-                padding: 20px;
-                margin: 20px 10px;
-            }
-            
-            .ribbon {
-                right: -10px;
-                width: 50px;
-                height: 50px;
-            }
+            .title { font-size: 2.1rem; }
+            .form-container { padding: 22px 18px; }
         }
     </style>
 </head>
 <body>
-    <div class="hearts-decoration" id="heartsDecoration"></div>
-    
-    <div class="container">
-        <div class="header">
-            <h1 class="title">🫧 방명록 🫧</h1>
-            <p class="subtitle">낙원인이라면 방명록을 남겨줘~♪⊹.˚</p>
-            <div class="ribbon"></div>
-        </div>
 
-        <div id="firebaseStatus" class="firebase-status">
-             Firebase 연결 중... 잠시만 기다려주세요!
-        </div>
+<!-- 별 캔버스 -->
+<canvas id="starCanvas"></canvas>
 
-        <div class="form-container">
-            <form id="guestbookForm">
-                <div class="form-group">
-                    <label for="name">✦ 이름</label>
-                    <input type="text" id="name" name="name" required placeholder="이름을 알려줘!">
-                </div>
-                
-                <div class="form-group">
-                    <label for="message">✦ 메시지</label>
-                    <textarea id="message" name="message" required placeholder="메시지를 남겨줘!"></textarea>
-                </div>
-                
-                <button type="submit" class="submit-btn" id="submitBtn">🤍 방명록에 남기기 🤍</button>
-            </form>
-        </div>
-
-        <div class="guestbook-entries" id="entries">
-            <div class="loading">방명록을 불러오는 중...</div>
-        </div>
+<div class="container">
+    <div class="header">
+        <h1 class="title">✦ 방명록 ✦</h1>
+        <div class="title-divider"></div>
+        <p class="subtitle">낙원인이라면 방명록을 남겨줘~♪⊹.˚</p>
     </div>
 
-    <!-- Firebase SDK -->
-    <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-        import { getFirestore, collection, addDoc, onSnapshot, orderBy, query, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+    <div id="firebaseStatus" class="firebase-status">Firebase 연결 중…</div>
 
-        // Firebase 설정
-        const firebaseConfig = {
-            apiKey: "AIzaSyD9Y_7VyzjQvfPBjixoNf8fizfxlwzQr4I",
-            authDomain: "beta-b7f78.firebaseapp.com",
-            projectId: "beta-b7f78",
-            storageBucket: "beta-b7f78.firebasestorage.app",
-            messagingSenderId: "8487351227",
-            appId: "1:8487351227:web:ef99c0c1d46850b27f4a9e",
-            measurementId: "G-HMCXTFE8YC"
-        };
+    <div class="form-container glass-card">
+        <form id="guestbookForm">
+            <div class="form-group">
+                <label for="name">✦ 이름</label>
+                <input type="text" id="name" required placeholder="이름을 알려줘!">
+            </div>
+            <div class="form-group">
+                <label for="message">✦ 메시지</label>
+                <textarea id="message" required placeholder="메시지를 남겨줘!"></textarea>
+            </div>
+            <button type="submit" class="submit-btn" id="submitBtn">✦ 방명록 남기기 ✦</button>
+        </form>
+    </div>
 
-        let app, db;
-        let isFirebaseConnected = false;
+    <div class="guestbook-entries" id="entries">
+        <div class="loading">방명록을 불러오는 중…</div>
+    </div>
+</div>
 
-        // Firebase 초기화
+<!-- Firebase SDK -->
+<script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+    import { getFirestore, collection, addDoc, onSnapshot, orderBy, query, serverTimestamp }
+        from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyD9Y_7VyzjQvfPBjixoNf8fizfxlwzQr4I",
+        authDomain: "beta-b7f78.firebaseapp.com",
+        projectId: "beta-b7f78",
+        storageBucket: "beta-b7f78.firebasestorage.app",
+        messagingSenderId: "8487351227",
+        appId: "1:8487351227:web:ef99c0c1d46850b27f4a9e",
+        measurementId: "G-HMCXTFE8YC"
+    };
+
+    let db, isConnected = false;
+
+    try {
+        const app = initializeApp(firebaseConfig);
+        db = getFirestore(app);
+        isConnected = true;
+        setStatus('firebase-connected', '✦ 모든 친구들이 방명록을 볼 수 있어요 ✦');
+    } catch (e) {
+        setStatus('firebase-error', '데모 모드 — 이 기기에서만 저장됩니다');
+    }
+
+    function setStatus(cls, msg) {
+        const el = document.getElementById('firebaseStatus');
+        el.className = 'firebase-status ' + cls;
+        el.textContent = msg;
+    }
+
+    async function saveFirebase(name, message) {
         try {
-            // 실제 Firebase 프로젝트가 없으면 데모 모드로 작동
-            if (firebaseConfig.apiKey === "YOUR_API_KEY") {
-                throw new Error("Firebase 설정이 필요합니다");
-            }
-            
-            app = initializeApp(firebaseConfig);
-            db = getFirestore(app);
-            isFirebaseConnected = true;
-            
-            document.getElementById('firebaseStatus').className = 'firebase-status firebase-connected';
-            document.getElementById('firebaseStatus').textContent = 'Firebase 연결 완료! 이제 모든 친구들이 방명록을 볼 수 있어요!';
-            
-        } catch (error) {
-            console.log('Firebase 데모 모드로 실행합니다:', error.message);
-            document.getElementById('firebaseStatus').className = 'firebase-status firebase-error';
-            document.getElementById('firebaseStatus').innerHTML = '데모 모드입니다. Firebase 설정 후 실제 사용 가능해요!<br><small>아래 설정 방법을 확인해주세요 👇</small>';
-            
-            // 데모 모드에서는 로컬스토리지 사용
-            isFirebaseConnected = false;
-        }
+            await addDoc(collection(db, 'guestbook'), { name, message, timestamp: serverTimestamp() });
+            return true;
+        } catch { return false; }
+    }
 
-        // 하트 장식 생성
-        function createHearts() {
-            const heartsContainer = document.getElementById('heartsDecoration');
-            const heartSymbols = ['🦭', '💭', '☁️', '🫧', '🪼', '🤍'];
-            
-            for (let i = 0; i < 15; i++) {
-                const heart = document.createElement('div');
-                heart.className = 'heart';
-                heart.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
-                heart.style.left = Math.random() * 100 + '%';
-                heart.style.top = Math.random() * 100 + '%';
-                heart.style.animationDelay = Math.random() * 4 + 's';
-                heartsContainer.appendChild(heart);
-            }
-        }
+    function loadFirebase() {
+        const q = query(collection(db, 'guestbook'), orderBy('timestamp', 'desc'));
+        onSnapshot(q, snap => {
+            const entries = snap.docs.map(d => {
+                const data = d.data();
+                return {
+                    name: data.name, message: data.message,
+                    date: data.timestamp
+                        ? data.timestamp.toDate().toLocaleString('ko-KR', { year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit' })
+                        : '방금 전'
+                };
+            });
+            renderEntries(entries);
+        });
+    }
 
-        // Firebase에 방명록 저장
-        async function saveToFirebase(name, message) {
-            try {
-                const docRef = await addDoc(collection(db, 'guestbook'), {
-                    name: name,
-                    message: message,
-                    timestamp: serverTimestamp()
-                });
-                console.log('Firebase에 저장됨:', docRef.id);
-                return true;
-            } catch (error) {
-                console.error('Firebase 저장 실패:', error);
-                return false;
-            }
-        }
+    function saveLocal(name, message) {
+        const arr = JSON.parse(localStorage.getItem('gb') || '[]');
+        arr.unshift({ name, message, date: new Date().toLocaleString('ko-KR', { year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit' }) });
+        localStorage.setItem('gb', JSON.stringify(arr));
+    }
+    function loadLocal() { renderEntries(JSON.parse(localStorage.getItem('gb') || '[]')); }
 
-        // Firebase에서 방명록 실시간 로드
-        function loadFromFirebase() {
-            const q = query(collection(db, 'guestbook'), orderBy('timestamp', 'desc'));
-            
-            onSnapshot(q, (querySnapshot) => {
-                const entries = [];
-                querySnapshot.forEach((doc) => {
-                    const data = doc.data();
-                    entries.push({
-                        id: doc.id,
-                        name: data.name,
-                        message: data.message,
-                        date: data.timestamp ? data.timestamp.toDate().toLocaleString('ko-KR', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit'
-                        }) : '방금 전'
-                    });
-                });
-                displayEntries(entries);
+    function esc(t) { const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
+
+    function renderEntries(entries) {
+        const el = document.getElementById('entries');
+        if (!entries.length) {
+            el.innerHTML = `<div class="no-entries glass-card">아직 방명록이 비어있어요 💭<br>첫 번째 메시지를 남겨주세요 🪼</div>`;
+            return;
+        }
+        el.innerHTML = entries.map((e, i) => `
+            <div class="entry glass-card" style="animation-delay:${i * 0.08}s">
+                <div class="entry-header">
+                    <div class="entry-name">${esc(e.name)}</div>
+                    <div class="entry-date">${e.date}</div>
+                </div>
+                <div class="entry-message">${esc(e.message)}</div>
+            </div>`).join('');
+    }
+
+    document.getElementById('guestbookForm').addEventListener('submit', async e => {
+        e.preventDefault();
+        const name    = document.getElementById('name').value.trim();
+        const message = document.getElementById('message').value.trim();
+        const btn     = document.getElementById('submitBtn');
+        if (!name || !message) return;
+
+        btn.disabled = true;
+        btn.textContent = '저장 중…';
+
+        const ok = isConnected ? await saveFirebase(name, message) : (saveLocal(name, message), loadLocal(), true);
+
+        document.getElementById('name').value = '';
+        document.getElementById('message').value = '';
+        btn.textContent = ok ? '✦ 등록되었습니다 ✦' : '✕ 저장 실패';
+
+        setTimeout(() => {
+            btn.textContent = '✦ 방명록 남기기 ✦';
+            btn.disabled = false;
+        }, 2200);
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+        isConnected ? loadFirebase() : loadLocal();
+    });
+</script>
+
+<!-- 별/십자가 반짝임 캔버스 -->
+<script>
+(function() {
+    const canvas = document.getElementById('starCanvas');
+    const ctx    = canvas.getContext('2d');
+    let W, H, stars = [];
+
+    function resize() {
+        W = canvas.width  = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+    }
+
+    function randRange(a, b) { return a + Math.random() * (b - a); }
+
+    function initStars() {
+        stars = [];
+        // 훨씬 많이 — 화면당 약 250~400개
+        const count = Math.floor((W * H) / 2200);
+        for (let i = 0; i < count; i++) {
+            // 십자가 40%, 점 60%
+            const type = Math.random() < 0.40 ? 'cross' : 'dot';
+            stars.push({
+                x:     randRange(0, W),
+                y:     randRange(0, H),
+                type,
+                // 크기: 십자가는 2~9, 점은 0.4~2.2
+                size:  randRange(type === 'cross' ? 2 : 0.4, type === 'cross' ? 9 : 2.2),
+                alpha: randRange(0.15, 1.0),
+                // 반짝임 속도 다양하게
+                speed: randRange(0.004, 0.025),
+                phase: randRange(0, Math.PI * 2),
+                // 흰색 위주, 살짝 파란 틴트
+                whiteness: randRange(0.6, 1.0),
             });
         }
+    }
 
-        // 로컬스토리지 방식 (데모용)
-        function saveToLocal(name, message) {
-            const entries = JSON.parse(localStorage.getItem('guestbookEntries') || '[]');
-            const newEntry = {
-                id: Date.now(),
-                name: name,
-                message: message,
-                date: new Date().toLocaleString('ko-KR', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                })
-            };
-            entries.unshift(newEntry);
-            localStorage.setItem('guestbookEntries', JSON.stringify(entries));
-            return newEntry;
-        }
+    function drawCross(x, y, size, alpha, w) {
+        // w: whiteness 0~1 → 완전 흰색 ~ 옅은 하늘색 사이
+        const lightness = 88 + w * 10;   // 88~98%
+        const sat       = (1 - w) * 55;  // 0~55% 채도
+        const color     = `hsl(210, ${sat}%, ${lightness}%)`;
+        const glow      = `hsla(210, 70%, 95%, 0.9)`;
 
-        function loadFromLocal() {
-            const entries = JSON.parse(localStorage.getItem('guestbookEntries') || '[]');
-            displayEntries(entries);
-        }
+        ctx.save();
+        ctx.globalAlpha = alpha;
+        ctx.strokeStyle = color;
+        ctx.lineWidth   = Math.max(0.8, size * 0.18);
+        ctx.shadowBlur  = size * 5;
+        ctx.shadowColor = glow;
+        ctx.lineCap     = 'round';
 
-        // 방명록 표시
-        function displayEntries(entries) {
-            const entriesContainer = document.getElementById('entries');
-            
-            if (entries.length === 0) {
-                entriesContainer.innerHTML = `
-                    <div class="no-entries">
-                        아직 방명록이 비어있어요 💭<br>
-                        첫 번째 메시지를 남겨주세요! 🪼
-                    </div>
-                `;
-                return;
-            }
+        // 세로
+        ctx.beginPath();
+        ctx.moveTo(x, y - size);
+        ctx.lineTo(x, y + size);
+        ctx.stroke();
+        // 가로
+        ctx.beginPath();
+        ctx.moveTo(x - size, y);
+        ctx.lineTo(x + size, y);
+        ctx.stroke();
 
-            entriesContainer.innerHTML = entries.map(entry => `
-                <div class="entry">
-                    <div class="entry-header">
-                        <div class="entry-name">${escapeHtml(entry.name)}</div>
-                        <div class="entry-date">${entry.date}</div>
-                    </div>
-                    <div class="entry-message">${escapeHtml(entry.message)}</div>
-                </div>
-            `).join('');
-        }
+        // 대각선 짧은 팔 (크리스탈 느낌)
+        const d = size * 0.42;
+        ctx.globalAlpha = alpha * 0.45;
+        ctx.lineWidth   = Math.max(0.5, size * 0.10);
+        ctx.shadowBlur  = size * 3;
+        ctx.beginPath(); ctx.moveTo(x-d, y-d); ctx.lineTo(x+d, y+d); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(x+d, y-d); ctx.lineTo(x-d, y+d); ctx.stroke();
 
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
+        ctx.restore();
+    }
 
-        // 폼 제출 처리
-        document.getElementById('guestbookForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            const name = document.getElementById('name').value.trim();
-            const message = document.getElementById('message').value.trim();
-            const submitBtn = document.getElementById('submitBtn');
-            
-            if (name && message) {
-                submitBtn.disabled = true;
-                submitBtn.textContent = '🦭 저장 중...';
-                
-                let success = false;
-                
-                if (isFirebaseConnected) {
-                    success = await saveToFirebase(name, message);
-                } else {
-                    saveToLocal(name, message);
-                    loadFromLocal();
-                    success = true;
-                }
-                
-                if (success) {
-                    // 폼 초기화
-                    document.getElementById('name').value = '';
-                    document.getElementById('message').value = '';
-                    
-                    // 성공 메시지
-                    submitBtn.textContent = '🫧 등록되었습니다! 🫧';
-                    submitBtn.style.background = 'linear-gradient(45deg, #b8d4b8, #c8e6c9)';
-                    
-                    setTimeout(() => {
-                        submitBtn.textContent = '🤍 방명록에 남기기 🤍';
-                        submitBtn.style.background = 'linear-gradient(45deg, #d4a5d9, #e8deff)';
-                        submitBtn.disabled = false;
-                    }, 2000);
-                } else {
-                    submitBtn.textContent = '❌ 저장 실패';
-                    submitBtn.style.background = 'linear-gradient(45deg, #e8c9d4, #f0d4e0)';
-                    
-                    setTimeout(() => {
-                        submitBtn.textContent = '🤍 방명록에 남기기 🤍';
-                        submitBtn.style.background = 'linear-gradient(45deg, #d4a5d9, #e8deff)';
-                        submitBtn.disabled = false;
-                    }, 2000);
-                }
-            }
+    function drawDot(x, y, size, alpha, w) {
+        const lightness = 88 + w * 10;
+        const sat       = (1 - w) * 50;
+        ctx.save();
+        ctx.globalAlpha = alpha;
+        const grad = ctx.createRadialGradient(x, y, 0, x, y, size * 3);
+        grad.addColorStop(0,   `hsla(210, ${sat}%, ${lightness}%, 1)`);
+        grad.addColorStop(0.35,`hsla(210, ${sat+10}%, ${lightness-5}%, 0.7)`);
+        grad.addColorStop(1,   `hsla(210, 60%, 80%, 0)`);
+        ctx.fillStyle  = grad;
+        ctx.shadowBlur  = size * 6;
+        ctx.shadowColor = `hsla(210, 80%, 96%, 0.8)`;
+        ctx.beginPath();
+        ctx.arc(x, y, size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+    }
+
+    function tick() {
+        ctx.clearRect(0, 0, W, H);
+
+        // 파란~네이비 그라데이션 배경
+        const bg = ctx.createLinearGradient(0, 0, 0, H);
+        bg.addColorStop(0,    '#0a1628');   // 상단: 미드나이트 블루
+        bg.addColorStop(0.3,  '#0d2040');   // 딥 블루
+        bg.addColorStop(0.65, '#091830');   // 네이비
+        bg.addColorStop(1,    '#040d1c');   // 바텀: 딥 네이비
+        ctx.fillStyle = bg;
+        ctx.fillRect(0, 0, W, H);
+
+        // 중앙 은은한 글로우 (밤바다 빛 반사)
+        const glow = ctx.createRadialGradient(W*0.5, H*0.38, 0, W*0.5, H*0.38, W*0.55);
+        glow.addColorStop(0,   'rgba(60, 130, 210, 0.07)');
+        glow.addColorStop(0.5, 'rgba(30,  80, 160, 0.04)');
+        glow.addColorStop(1,   'rgba(0,   0,   0,  0)');
+        ctx.fillStyle = glow;
+        ctx.fillRect(0, 0, W, H);
+
+        stars.forEach(s => {
+            s.phase += s.speed;
+            const flicker = Math.sin(s.phase) * 0.5 + 0.5;   // 0~1
+            // 완전히 꺼졌다 켜지는 극적인 반짝임
+            const a = Math.pow(flicker, 1.6) * s.alpha;
+
+            if (s.type === 'cross') drawCross(s.x, s.y, s.size, a, s.whiteness);
+            else                   drawDot  (s.x, s.y, s.size, a, s.whiteness);
         });
 
-        // 페이지 로드 시 초기화
-        document.addEventListener('DOMContentLoaded', function() {
-            createHearts();
-            
-            if (isFirebaseConnected) {
-                loadFromFirebase();
-            } else {
-                loadFromLocal();
-            }
-        });
-    </script>
+        requestAnimationFrame(tick);
+    }
+
+    window.addEventListener('resize', () => { resize(); initStars(); });
+    resize();
+    initStars();
+    requestAnimationFrame(tick);
+})();
+</script>
 </body>
 </html>
